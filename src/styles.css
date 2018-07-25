@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+maps-container{
+    margin: 20 auto;
+}
+
+agm-map{
+    height: 300px;
+}
