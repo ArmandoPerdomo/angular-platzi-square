@@ -6,48 +6,13 @@
 
   <div class="collapse navbar-collapse" id="navBarPlatziSquare">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/places" >Inicio</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Contacto</a>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/details/:id" href="#">Detalles</a>
       </li>
     </ul>
   </div>
 </nav>
-
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <h1>Mapa de localización</h1>
-      <agm-map [latitude]="lat" [longitude]="lng">
-        <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-      </agm-map>
-    </div>
-  </div>
-</div>
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col">
-      <h2>Lista de sitios</h2>
-      <ul class="list-group">
-        <ng-container *ngFor="let place of places">
-          <li [ngSwitch]="place.closeness" 
-            [highlight]="place.plan" 
-            [count-visitors]="place" 
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            {{place.name}}
-            <span *ngSwitchCase="1" class="badge badge-success badge-pill">Muy cercano</span>
-            <span *ngSwitchCase="2" class="badge badge-warning badge-pill">Cercano</span>
-            <span *ngSwitchCase="3" class="badge badge-danger badge-pill">Lejano</span>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-    <div class="col">
-      <h2>Destacados</h2>
-    </div>
-  </div>
-</div>
+<router-outlet></router-outlet>
