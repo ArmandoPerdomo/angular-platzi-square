@@ -1,0 +1,19 @@
+.premiun{
+    background-color: #bee5eb;
+}
+small{
+    position: absolute;
+    right: 20px;
+    top: 0;
+    font-style: italic;
+}
+.tool-buttons{
+    text-align: center;
+    margin: 1em;
+}
+
+.tool-buttons a{
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}

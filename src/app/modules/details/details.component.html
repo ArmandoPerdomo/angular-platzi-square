@@ -11,12 +11,44 @@
   </div>
   <div class="row">
     <div class="col">
-      <div class="jumbotron">
-        <h1 class="display-4">Hello, world!</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+      <div class="jumbotron" [ngClass]="place.plan === 'premiun' ? 'premiun' : ''">
+        <small *ngIf="place.plan === 'premiun'">Plan Premiun</small>
+        <h1 class="display-4">
+          {{place.name}} 
+          <a class="btn" [@pushAnimate]="starState" (click)="spotlightPlace()" data-toggle="tooltip" data-placement="top" title="Destacar">
+            <fa-icon *ngIf="!place.favorite" [icon]="['far','star']" size="lg"></fa-icon>
+            <fa-icon *ngIf="place.favorite" [icon]="['fas','star']" size="lg"></fa-icon>
+          </a>
+        </h1>
+        <p class="lead">{{place.description}}</p>
         <hr>
-        <p></p>
+        <p class="lead">Número de Visitas: {{place.visits}}</p>
+        <p class="lead">Distancia: {{place.distance}}Km</p>
+        <p class="lead" [ngSwitch]="place.closeness">Cercanía: 
+          <span *ngSwitchCase="1" class="badge badge-success badge-pill">Muy cercano</span>
+          <span *ngSwitchCase="2" class="badge badge-warning badge-pill">Cercano</span>
+          <span *ngSwitchCase="3" class="badge badge-danger badge-pill">Lejano</span>
+        </p>
+        <hr>
+        <div class="tool-buttons">
+          <a class="btn btn-primary" data-toggle="modal" data-target="#add">
+            <fa-icon [icon]="['fas','pencil-alt']" size="sm"></fa-icon>
+            Modificar
+          </a>
+          <a class="btn btn-danger" data-toggle="modal" data-target="#delete">
+            <fa-icon [icon]="['fas','trash-alt']" size="sm"></fa-icon>
+            Eliminar
+          </a>
+        </div>
       </div>
+    </div>
+    <div class="col">
+      <h1>Mapa de localización</h1>
+      <agm-map [latitude]="place.lat" [longitude]="place.lng" [zoom]="18">
+        <agm-marker [latitude]="place.lat" [longitude]="place.lng"></agm-marker>
+      </agm-map>
     </div>
   </div>
 </div>
+<app-add-place-modal [place]="place"></app-add-place-modal>
+<app-delete-place-component [place]="place"></app-delete-place-component>

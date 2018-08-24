@@ -1,0 +1,61 @@
+<!-- Modal -->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="addLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addLabel">Agregar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form #newPlaceForm (ngSubmit)="save()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="name">Nombre</label>
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Nombre del negocio" [(ngModel)]="place.name" required>
+                </div>
+                <div class="form-group">
+                  <label for="plan">Elige un plan</label>
+                  <select id="plan" class="form-control" name="plan" [(ngModel)]="place.plan">
+                    <option value="free">Gratis</option>
+                    <option value="premiun">Premiun</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="closeness">Cercanía</label>
+                  <input type="number" min="1" max="3" name="closeness" class="form-control" id="closeness" [(ngModel)]="place.closeness" required>
+                  <small id="closeness" class="form-text text-muted">1: Muy cercano, 2: Cercano, 3: Lejano.</small>
+                </div>
+                <div class="form-group">
+                  <label for="description">Descripción</label>
+                  <textarea name="description" class="form-control" id="description" placeholder="El sitio mas bello" [(ngModel)]="place.description" rows="3" required></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                  <h3>Localización</h3>
+                  <agm-map [latitude]="place.lat" 
+                    [longitude]="place.lng" 
+                    [zoom]="zoom" 
+                    [disableDefaultUI]="true" 
+                    (mapClick)="mapClicked($event)">
+                    <agm-marker [latitude]="marker.lat"
+                      [longitude]="marker.lng"
+                      [label]="marker.label"
+                      [markerDraggable]="marker.draggable">
+                    </agm-marker>
+                  </agm-map>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

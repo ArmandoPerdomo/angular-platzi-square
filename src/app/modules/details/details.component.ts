@@ -1,28 +1,58 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '../../../../node_modules/@angular/router';
+import { ActivatedRoute, Router } from '../../../../node_modules/@angular/router';
+import { PlacesService } from '../../providers/places.service';
+import { AngularFirestoreCollection } from '../../../../node_modules/angularfire2/firestore';
+import { Place } from '../../models/place';
+import { ToastrService } from '../../../../node_modules/ngx-toastr';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+
 
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.css']
+  styleUrls: ['./details.component.css'],
+  animations: [
+    trigger('pushAnimate',[
+      state('init', style({
+        transform: 'scaleY(.5)'
+      })),
+      state('fin', style({
+        transform: 'scaleY(1)'
+      })),
+      transition('init <=> fin',animate(100)),
+    ])
+  ]
 })
 export class DetailsComponent implements OnInit {
 
-  places: any = [
-    {id: 1, plan: 'free', closeness: 1, distance: 0.50, name: 'Barsoke' , visits: 0},
-    {id: 2, plan: 'premiun', closeness: 2, distance: 4.50, name: 'Arkiteck' , visits: 0},
-    {id: 3, plan: 'free', closeness: 1, distance: 1, name: 'Panadería la Alianza' , visits: 0},
-    {id: 4, plan: 'premiun', closeness: 3, distance: 8.50, name: 'Los Girasoles' , visits: 0},
-    {id: 5, plan: 'premiun', closeness: 3, distance: 8, name: 'La Hacienda' , visits: 0},
-    {id: 6, plan: 'free', closeness: 1, distance: 0.50, name: 'La Venus' , visits: 0},
-    {id: 7, plan: 'free', closeness: 3, distance: 12, name: 'Maro\'s Café' , visits: 0},
-    {id: 8, plan: 'free', closeness: 2, distance: 6.50, name: 'El Paso' , visits: 0}
-  ];
-
-  id = null;
-  place = {};
-  constructor(private route: ActivatedRoute) {
+  id: string = null;
+  place: Place = new Place();
+  private placesCollection: AngularFirestoreCollection<Place>;
+  starState = 'fin';
+  constructor(private route: ActivatedRoute, private placesService: PlacesService, private router: Router, private toastr: ToastrService) {
     this.id = this.route.snapshot.queryParams['id'];
+    this.placesCollection = placesService.getCollection();
+
+    this.placesCollection.doc(this.id).valueChanges()
+      .subscribe( (_: Place) => {
+        this.place = _;
+      });
+  }
+
+
+  spotlightPlace(){
+    this.starState = 'init';
+    this.place.favorite = !this.place.favorite;
+    this.placesCollection.doc(this.id).update(this.place)
+      .then( () => {
+        this.starState = 'fin';
+        this.toastr.success(`Se ha actualizado el estado`, 'Ok!');
+      })
+      .catch(err => {
+      console.log('Error:',err);
+        this.starState = 'fin';
+        this.toastr.error('Ha ocurrido un error!','Error');
+      });
   }
 
   ngOnInit() {
